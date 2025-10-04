@@ -1,10 +1,13 @@
 package taller
 
+import scala.annotation.tailrec
+
 class ConjuntosDifusos {
 
   type ConjDifuso = Int => Double
+
   // Funcion pertenece recibe un numero entero (elem) y un conjunto difuso (s)
-  def pertenece(elem: Int, s: ConjDifuso): Double = { s(elem) }
+  def pertenece(elem: Int, s: ConjDifuso): Double = s(elem)
 
   // Funcion grande aqui construimmos un conjunto difuso de numeros grandes
   def grande(d: Int, e: Int): ConjDifuso = {
@@ -19,18 +22,30 @@ class ConjuntosDifusos {
       }
     }
   }
+
   // Funcion complemento recibe un conjunto difuso (c) y nos devuelve otro conjunto difuso en el cual nos respresenta su complemento
   def complemento(c: ConjDifuso): ConjDifuso = {
-    (s:Int) => 1.0 - c(s) // la formula del complemento de un conjunto difuso es fA(X) = 1 - fA(x) ==> FC(S) = 1.0 - c(s)
+    (s:Int) => 1.0 - c(s) // la formula del complemento de un conjunto difuso es fA(X) = 1 - fA(X) ==> FC(S) = 1.0 - c(s)
   }
 
   // Funcion union recibe dos cunjuntos difusos (cd1 y cd2) y nos devuelve un nuevo conjunto difuso en el que se ve la union de ambos
   def union(cd1: ConjDifuso, cd2: ConjDifuso): ConjDifuso = { // calcula el grado de cd1 y cd2
     (s:Int) => math.max(cd1(s), cd2(s)) // aqui devuelve el valor maximo entre ambos con math.max
   }
+
   // Funcion interseccion recibe dos conjuntos difusos (cd1 y cd2) y nos devuelve un nuevo conjunto difuso en el que la interseccion de ambos
   def interseccion(cd1: ConjDifuso, cd2: ConjDifuso): ConjDifuso = { // calcula el grado de cd1 y cd2
     (s:Int) => math.min(cd1(s), cd2(s)) // aqui devuelve el valor minimo entre ambos con math.min
+  }
+
+  def inclusion(cd1: ConjDifuso, cd2: ConjDifuso): Boolean = {
+    @annotation.tailrec
+    def aux(n: Int): Boolean = {
+      if  (n > 1000) true
+      else if (cd1(n) > cd2(n)) false
+      else aux(n + 1)
+    }
+    aux(0)
   }
 
 }
