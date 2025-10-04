@@ -19,5 +19,9 @@ class ConjuntosDifusos {
       }
     }
   }
+  // Funcion complemento recibe un conjunto difuso (c) y nos devuelve otro conjunto difuso en el cual nos respresenta su complemento
+  def complemento(c: ConjDifuso): ConjDifuso = {
+    (s:Int) => 1.0 - c(s) // la formula del complemento de un conjunto difuso es fA(X) = 1 - fA(x) ==> FC(S) = 1.0 - c(s)
+  }
 
 }
