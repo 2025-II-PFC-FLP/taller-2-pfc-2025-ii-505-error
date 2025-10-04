@@ -28,5 +28,9 @@ class ConjuntosDifusos {
   def union(cd1: ConjDifuso, cd2: ConjDifuso): ConjDifuso = { // calcula el grado de cd1 y cd2
     (s:Int) => math.max(cd1(s), cd2(s)) // aqui devuelve el valor maximo entre ambos con math.max
   }
+  // Funcion interseccion recibe dos conjuntos difusos (cd1 y cd2) y nos devuelve un nuevo conjunto difuso en el que la interseccion de ambos
+  def interseccion(cd1: ConjDifuso, cd2: ConjDifuso): ConjDifuso = { // calcula el grado de cd1 y cd2
+    (s:Int) => math.min(cd1(s), cd2(s)) // aqui devuelve el valor minimo entre ambos con math.min
+  }
 
 }
