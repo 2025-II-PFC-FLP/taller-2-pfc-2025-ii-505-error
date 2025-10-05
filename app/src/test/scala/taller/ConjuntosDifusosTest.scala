@@ -62,4 +62,17 @@ class ConjuntosDifusosTest extends AnyFunSuite {
     assert(u(4) == cd(4))
   }
 
+  test("La intersección debe tomar el valor mínimo entre los dos conjuntos") {
+    val cd1: ConjDifuso = x => 0.3
+    val cd2: ConjDifuso = x => 0.7
+    val i = interseccion(cd1, cd2)
+    assert(i(5) == 0.3)
+  }
+
+  test("La intersección de dos conjuntos iguales debe dar el mismo conjunto") {
+    val cd: ConjDifuso = x => if (x < 5) 0.8 else 0.2
+    val i = interseccion(cd, cd)
+    assert(i(4) == cd(4))
+  }
+
 }
