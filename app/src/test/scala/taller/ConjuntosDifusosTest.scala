@@ -49,4 +49,17 @@ class ConjuntosDifusosTest extends AnyFunSuite {
     assert(comp(5) == 1.0)
   }
 
+  test("La unión debe tomar el valor máximo entre los dos conjuntos") {
+    val cd1: ConjDifuso = x => 0.3
+    val cd2: ConjDifuso = x => 0.7
+    val u = union(cd1, cd2)
+    assert(u(5) == 0.7)
+  }
+
+  test("La unión de dos conjuntos iguales debe dar el mismo conjunto") {
+    val cd: ConjDifuso = x => if (x % 2 == 0) 0.6 else 0.3
+    val u = union(cd, cd)
+    assert(u(4) == cd(4))
+  }
+
 }
