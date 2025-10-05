@@ -87,4 +87,23 @@ class ConjuntosDifusosTest extends AnyFunSuite {
     assert(!inclusion(cd2, cd1))
   }
 
+
+  test("Un conjunto vacío está incluido en cualquier conjunto") {
+    val cd1: ConjDifuso = _ => 0.0
+    val cd2: ConjDifuso = _ => 0.7
+    assert(inclusion(cd1, cd2))
+  }
+
+  test("Dos conjuntos idénticos deben ser iguales") {
+    val cd1: ConjDifuso = x => if (x < 5) 0.4 else 0.7
+    val cd2: ConjDifuso = x => if (x < 5) 0.4 else 0.7
+    assert(igualdad(cd1, cd2))
+  }
+
+  test("Conjuntos diferentes no deben ser iguales") {
+    val cd1: ConjDifuso = _ => 0.2
+    val cd2: ConjDifuso = _ => 0.8
+    assert(!igualdad(cd1, cd2))
+  }
+
 }
