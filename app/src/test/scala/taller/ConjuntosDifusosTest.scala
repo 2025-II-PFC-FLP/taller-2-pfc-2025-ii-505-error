@@ -75,4 +75,16 @@ class ConjuntosDifusosTest extends AnyFunSuite {
     assert(i(4) == cd(4))
   }
 
+  test("cd1 debe estar incluido en cd2") {
+    val cd1: ConjDifuso = x => if (x < 5) 0.3 else 0.8
+    val cd2: ConjDifuso = x => if (x < 5) 0.5 else 0.9
+    assert(inclusion(cd1, cd2))
+  }
+
+  test("cd2 no debe estar incluido en cd1") {
+    val cd1: ConjDifuso = x => if (x < 5) 0.3 else 0.8
+    val cd2: ConjDifuso = x => if (x < 5) 0.5 else 0.9
+    assert(!inclusion(cd2, cd1))
+  }
+
 }
