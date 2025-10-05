@@ -7,6 +7,7 @@ import org.scalatestplus.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class ConjuntosDifusosTest extends AnyFunSuite {
   val objConjuntosDifusos = new ConjuntosDifusos()
+
   import objConjuntosDifusos._
 
   test("El conjunto grande(d=1, e=2) debe dar valores cercanos a 1 para números grandes") {
@@ -29,4 +30,23 @@ class ConjuntosDifusosTest extends AnyFunSuite {
     val g = grande(1, 2)
     assert(g(10) >= g(5))
   }
+
+  test("El complemento de un conjunto difuso invierte los valores correctamente") {
+    val cd: ConjDifuso = x => 0.2
+    val comp = complemento(cd)
+    assert(math.abs(comp(0) - 0.8) < 1e-6)
+  }
+
+  test("El complemento de un conjunto con valor 1 debe ser 0") {
+    val cd: ConjDifuso = _ => 1.0
+    val comp = complemento(cd)
+    assert(comp(10) == 0.0)
+  }
+
+  test("El complemento de un conjunto con valor 0 debe ser 1") {
+    val cd: ConjDifuso = _ => 0.0
+    val comp = complemento(cd)
+    assert(comp(5) == 1.0)
+  }
+
 }
