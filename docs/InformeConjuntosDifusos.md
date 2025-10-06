@@ -211,93 +211,104 @@ $$
 * Para $( n = 3 ): ( \max(0.36, 0.25) = 0.36 )$.
 * Para $( n = 10 ): ( \max(0.694, 0.091) \approx 0.694 )$.
 
+5. Intersección $( G \cap P )$
+
+* Para $( n = 0 ): ( \min(0, 1) = 0.0 )$. 
+* Para $( n = 3 ): ( \min(0.36, 0.25) = 0.25 )$. 
+* Para $( n = 10 ): ( \min(0.694, 0.091) \approx 0.091 )$.
+
+
+6. Inclusión $( P \subseteq G )$
+
+* **Recursión `aux(θ)`**:  
+  $( \mu_P(0) = 1 > \mu_G(0) = 0 \Rightarrow \text{retorna `false`} ) inmediatamente$.
+* (No es subconjunto, ya que **pequeños** no son **grandes**).
+
+
+
+7. Inclusión $( G \subseteq \overline{G} )$
+
+* Para cada $( n \leq 1000 )$:  
+  $( \mu_G(n) \leq 1 - \mu_G(n) )$ siempre ya que $( \mu_G(n) \leq 0.5 )$ No, pero se verifica punto a punto).
+
+* **Ejemplo:**  
+  \( n = 0: 0 \leq 1 \),  
+  \( n = 3: 0.36 \leq 0.64 \),  
+  \( n = 10: 0.694 > 0.306 \Rightarrow \) En \( n = 10 \), falso (no incluido).
+
+- La recursión detecta en \( n = 10 \) y retorna `false`.
+8. **Igualdad \( G \) y \( \overline{G} \)?**
+
+* `inclusion(G, G)`:  
+  $$\mu_G(n) \le \mu_G(n) \quad \text{para todo } n \le 1000 \;\rightarrow\; \texttt{true}.$$
+
+* Inclusion mutua → `true`.
+
+**Resultado final:** Las pruebas realizadas con los valores representativos $( n = 0, 3, 10 )$ confirman que las operaciones definidas,  
+como la generación del conjunto “grande”, el complemento, la unión y la intersección,  
+funcionan de manera correcta y mantienen los grados dentro del intervalo \( [0, 1] \).
+
+Las operaciones puntuales se llevan a cabo de forma local y en **tiempo constante**,  
+mientras que las verificaciones globales (`inclusion`, `igualdad`) requieren recorrer un rango finito,  
+limitado a \( 1000 \), lo que asegura **terminación** y **costo predecible**.
+
+En la práctica, esto demuestra que la implementación es:
+
+- **Correcta:** los resultados se mantienen dentro del dominio válido $ [0, 1] $.
+- **Eficiente:** las operaciones locales no dependen del tamaño del conjunto.
+- **Adecuada:** se puede aplicar a dominios discretos y limitados.
+
 
 *** 
 ## _Mermaid_
 
-```mermaid
+```
 graph TD
-    subgraph multiply_123_456
-        A["a=123, b=456"]
-        A --> B1["p1 = multiply(23, 56)"]
-        A --> B2["p3 = multiply(1, 4)"]
-        A --> B3["p2 = multiply(24, 60)"]
+    subgraph Creacion
+        A["Instancia ConjuntosDifusos"]
+        A --> B["grande(d=2, e=2) → G"]
+        B --> C1["μ_G(0) = (0/2)^2 = 0"]
+        B --> C2["μ_G(3) = (3/5)^2 = 0.36"]
+        B --> C3["μ_G(10) = (10/12)^2 ≈ 0.694"]
     end
 
-    subgraph multiply_23_56
-        B1_0["a=23, b=56"]
-        B1_0 --> C1_1["p1_sub = multiply(3, 6)"]
-        B1_0 --> C1_2["p3_sub = multiply(2, 5)"]
-        B1_0 --> C1_3["p2_sub = multiply(5, 11)"]
+    subgraph Operaciones
+        B --> D["complemento(G) → Ḡ"]
+        D --> E1["μ_Ḡ(0) = 1 - 0 = 1"]
+        D --> E2["μ_Ḡ(3) = 1 - 0.36 = 0.64"]
+        D --> E3["μ_Ḡ(10) ≈ 1 - 0.694 = 0.306"]
+
+        A --> F["Conjunto P (pequeños): μ_P(n) = 1/(1+n)"]
+        F --> G1["μ_P(0) = 1"]
+        F --> G2["μ_P(3) = 0.25"]
+        F --> G3["μ_P(10) ≈ 0.091"]
+
+        B --> H["union(G, P) → U"]
+        H --> I1["max(0,1) = 1 (n=0)"]
+        H --> I2["max(0.36,0.25) = 0.36 (n=3)"]
+        H --> I3["max(0.694,0.091) ≈ 0.694 (n=10)"]
+
+        B --> J["interseccion(G, P) → I"]
+        J --> K1["min(0,1) = 0 (n=0)"]
+        J --> K2["min(0.36,0.25) = 0.25 (n=3)"]
+        J --> K3["min(0.694,0.091) ≈ 0.091 (n=10)"]
     end
 
-    subgraph multiply_1_4
-        B2_0["a=1, b=4"]
-        B2_0 --> D1["multiplyAux(1,4,0)"]
-        D1 --> D2["multiplyAux(0,8,4)"]
-        D2 --> R_B2["Retorna 4"]
+    subgraph Verificaciones
+        F --> L["inclusion(P, G)"]
+        L --> M["aux(0): 1 > 0 → false"]
+
+        B --> N["inclusion(G, Ḡ)"]
+        N --> O["aux(0): 0 ≤ 1, aux(1)... hasta n=10: 0.694 > 0.306 → false"]
+
+        B --> P["igualdad(G, G)"]
+        P --> Q["inclusion(G,G) = true && inclusion(G,G) = true → true"]
     end
 
-    subgraph multiply_24_60
-        B3_0["a=24, b=60"]
-        B3_0 --> E1_1["p1_sub = multiply(4, 0)"]
-        B3_0 --> E1_2["p3_sub = multiply(2, 6)"]
-        B3_0 --> E1_3["p2_sub = multiply(6, 6)"]
-    end
-
-    subgraph multiply_3_6
-        C1_1_0["a=3, b=6"] --> F1["multiplyAux(3,6,0)"]
-        F1 --> F2["multiplyAux(1,12,6)"]
-        F2 --> F3["multiplyAux(0,24,18)"]
-        F3 --> R_C1_1["Retorna 18"]
-    end
-
-    subgraph multiply_2_5
-        C1_2_0["a=2, b=5"] --> G1["multiplyAux(2,5,0)"]
-        G1 --> G2["multiplyAux(1,10,0)"]
-        G2 --> G3["multiplyAux(0,20,10)"]
-        G3 --> R_C1_2["Retorna 10"]
-    end
-
-    subgraph multiply_5_11
-        C1_3_0["a=5, b=11"] --> H1["multiplyAux(5,11,0)"]
-        H1 --> H2["multiplyAux(2,22,11)"]
-        H2 --> H3["multiplyAux(1,44,11)"]
-        H3 --> H4["multiplyAux(0,88,55)"]
-        H4 --> R_C1_3["Retorna 55"]
-    end
-
-    subgraph multiply_4_0
-        E1_1_0["a=4, b=0"] --> R_E1_1["Retorna 0"]
-    end
-
-    subgraph multiply_2_6
-        E1_2_0["a=2, b=6"] --> I1["multiplyAux(2,6,0)"]
-        I1 --> I2["multiplyAux(1,12,0)"]
-        I2 --> I3["multiplyAux(0,24,12)"]
-        I3 --> R_E1_2["Retorna 12"]
-    end
-
-    subgraph multiply_6_6
-        E1_3_0["a=6, b=6"] --> J1["multiplyAux(6,6,0)"]
-        J1 --> J2["multiplyAux(3,12,0)"]
-        J2 --> J3["multiplyAux(1,24,12)"]
-        J3 --> J4["multiplyAux(0,48,36)"]
-        J4 --> R_E1_3["Retorna 36"]
-    end
-
-    R_C1_1 --> B1_0
-    R_C1_2 --> B1_0
-    R_C1_3 --> B1_0
-    B1_0 --> R_B1["Retorna 1288"]
-
-    R_E1_1 --> B3_0
-    R_E1_2 --> B3_0
-    R_E1_3 --> B3_0
-    B3_0 --> R_B3["Retorna 1440"]
-
-    R_B1 --> A
-    R_B2 --> A
-    R_B3 --> A
-    A --> R_Final["Retorna 56088"]
+    C1 --> E1
+    C2 --> E2
+    C3 --> E3
+    G1 --> I1
+    G2 --> I2
+   
 ```
