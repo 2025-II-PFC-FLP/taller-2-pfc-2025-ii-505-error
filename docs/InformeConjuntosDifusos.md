@@ -229,12 +229,15 @@ $$
 7. Inclusión $( G \subseteq \overline{G} )$
 
 * Para cada $( n \leq 1000 )$:  
-  $( \mu_G(n) \leq 1 - \mu_G(n) )$ siempre ya que $( \mu_G(n) \leq 0.5 )$ No, pero se verifica punto a punto).
+  $( mu_G(n) \leq 1 - mu_G(n) )$ 
+  siempre ya que 
+  $( mu_G(n) \leq 0.5 )$ 
+  No, pero se verifica punto a punto).
 
 * **Ejemplo:**  
-  \( n = 0: 0 \leq 1 \),  
-  \( n = 3: 0.36 \leq 0.64 \),  
-  \( n = 10: 0.694 > 0.306 \Rightarrow \) En \( n = 10 \), falso (no incluido).
+  $( n = 0: 0 \leq 1 )$  
+  $( n = 3: 0.36 \leq 0.64 )$  
+  $( n = 10: 0.694 > 0.306 \Rightarrow ) En ( n = 10 )$, falso (no incluido).
 
 - La recursión detecta en \( n = 10 \) y retorna `false`.
 8. **Igualdad \( G \) y \( \overline{G} \)?**
@@ -262,7 +265,7 @@ En la práctica, esto demuestra que la implementación es:
 *** 
 ## _Mermaid_
 
-```
+```mermaid
 graph TD
     subgraph Creacion
         A["Instancia ConjuntosDifusos"]
